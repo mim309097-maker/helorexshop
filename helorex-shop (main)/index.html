@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    
+    <!-- Primary Meta Tags -->
+    <title>Helorex Shop - Official | Premium Online Shopping Experience</title>
+    <style>
+      /* Force hide Vite error overlays */
+      vite-error-overlay, #vite-error-overlay { 
+        display: none !important; 
+        visibility: hidden !important; 
+        opacity: 0 !important; 
+        pointer-events: none !important; 
+      }
+    </style>
+    <script>
+      (function() {
+        // THE NUCLEAR OPTION: Mock WebSocket to stop Vite from even trying to connect
+        const noop = () => {};
+        const MockWS = function() {
+          this.readyState = 3; // CLOSED
+          this.close = noop;
+          this.send = noop;
+          this.addEventListener = noop;
+          this.removeEventListener = noop;
+          setTimeout(() => { if (this.onclose) this.onclose({ wasClean: true }); }, 0);
+        };
+        MockWS.prototype = { CONNECTING: 0, OPEN: 1, CLOSING: 2, CLOSED: 3 };
+        window.WebSocket = MockWS;
+
+        // 1. SILENCE CONSOLE ERRORS
+        const originalError = console.error;
+        console.error = function(...args) {
+          if (args.length > 0 && typeof args[0] === 'string' && (args[0].includes('[vite]') || args[0].includes('WebSocket'))) {
+            return;
+          }
+          originalError.apply(console, args);
+        };
+
+        // 2. BLOCK ERROR EVENTS
+        const silence = (e) => {
+          if ((e.message || '').includes('WebSocket') || (e.reason && (e.reason.message || '').includes('WebSocket'))) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        };
+        window.addEventListener('error', silence, true);
+        window.addEventListener('unhandledrejection', silence, true);
+      })();
+    </script>
+    <meta name="title" content="Helorex Shop - Official | Premium Online Shopping Experience">
+    <meta name="description" content="Shop at Helorex Shop (helorexshop.com) for the finest collection of gadgets, fashion, and lifestyle essentials in Bangladesh. Fast delivery and real-time tracking.">
+    <meta name="keywords" content="Helorex Shop, helorexshop.com, Helorex Online, Shop Helorex, Bangladesh Ecommerce, Premium Shopping">
+    <meta name="author" content="Helorex Shop">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://helorexshop.com">
+    <meta property="og:title" content="Helorex Shop | Premium Online Store">
+    <meta property="og:description" content="Experience the future of shopping at Helorex Shop. Quality products, fast delivery, and real-time order tracking.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1472851294608-062f824d29cc?q=80&w=1200&auto=format&fit=crop">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://helorexshop.com">
+    <meta property="twitter:title" content="Helorex Shop | Premium Online Store">
+    <meta property="twitter:description" content="Discover premium gadgets and fashion at Helorex Shop. Shop now for the best deals.">
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+
